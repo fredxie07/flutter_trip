@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_trips/dao/home_dao.dart';
+import 'dart:convert';
 
 class HomePage extends StatefulWidget {
   @override
@@ -6,14 +8,31 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  void initState() {
+    super.initState();
+    loadData();
+  }
+  String resultString = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //剔除padding
       body: Center(
-        child: Text('首页'),
+        child: Text(resultString),
       )
     );
+  }
+  loadData() {
+    HomeDao.fetch().then((result) {
+//    try {
+      setState(() {
+        resultString = json.encode(result.config);
+      });
+//    }catch(e) {
+//      setState(() {
+//        resultString = e.toString();
+//      });
+//    }
+    });
   }
 }
 
