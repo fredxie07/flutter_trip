@@ -17,9 +17,9 @@ class _HomePageState extends State<HomePage> {
     _loadData();
   }
   List _imageUrls = [
-    'https://p3.ssl.qhimgs1.com/bdr/326__/t01f3c2fbbfc190da13.jpg',
-    'https://p0.ssl.qhimgs1.com/bdr/326__/t01c44703a9e96eac6a.jpg',
-    'https://ps.ssl.qhmsg.com/bdr/326__/t010b4260151f5bbb69.jpg'
+    'http://pic32.nipic.com/20130823/7459925_151603450000_2.jpg',
+    'http://pic163.nipic.com/file/20180421/7092831_140036752037_2.jpg',
+    'http://hbimg.b0.upaiyun.com/4147548aacbd056c9311ddc62daf09e24c73e12ffc7d-py9TME_fw658'
   ];
 //动态更改的透明度
   double appBarAlpha = 0;
