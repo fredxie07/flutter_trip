@@ -9,19 +9,27 @@ class GridNav extends StatelessWidget {
   const GridNav({Key key, @required this.gridNavModel}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: _gridNavItems(context)
+    return  PhysicalModel(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(6),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+          children: _gridNavItems(context)
+      ),
     );
   }
   _gridNavItems(BuildContext context) {
     List <Widget> items  = [];
     if(gridNavModel == null) return items;
+//    酒店网格
     if(gridNavModel.hotel != null) {
       items.add(_gridNavItem(context,gridNavModel.hotel,true));
     }
+//    机票网格
     if(gridNavModel.flight != null) {
       items.add(_gridNavItem(context,gridNavModel.flight,false));
     }
+//    旅游网格
     if(gridNavModel.travel != null) {
       items.add( _gridNavItem(context,gridNavModel.travel,false));
     }
@@ -58,9 +66,13 @@ class GridNav extends StatelessWidget {
   //最左侧带图片的大item
   _mainItem(BuildContext context, CommonModel model ) {
     return _wrapGesture(context, model, Stack(
+      alignment: Alignment.topCenter,
       children: <Widget>[
-        Image.network(model.icon,fit: BoxFit.fill,height: 88,alignment: AlignmentDirectional.bottomEnd,),
-        Text(model.title,style: TextStyle(fontSize: 14,color: Colors.white))
+        Container(
+          margin: EdgeInsets.only(top: 11),
+          child: Text(model.title,style: TextStyle(fontSize: 14,color: Colors.white)),
+        ),
+        Image.network(model.icon,fit: BoxFit.contain,height: 88,width: 121,alignment: AlignmentDirectional.bottomEnd,),
       ],
     ),
     );
@@ -85,8 +97,11 @@ class GridNav extends StatelessWidget {
       ],
     );
   }
-
-//  每一个小的item
+/*
+* Column中上下排列的item
+* @params  item 当前item文字
+* @params isTopItem 是否加下边框
+* */
   _item(BuildContext context,CommonModel item, bool isTopItem) {
     BorderSide borderSide = BorderSide(width: 0.8,color: Colors.white);
     return FractionallySizedBox(
@@ -95,7 +110,7 @@ class GridNav extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border(
             left:borderSide,
-            bottom: isTopItem ? borderSide : BorderSide.none
+            bottom: isTopItem ? borderSide  :  BorderSide.none
           )
         ),
         child:_wrapGesture(context, item, Center(
