@@ -10,6 +10,7 @@ import 'package:flutter_trips/widget/loading_container.dart';
 import 'package:flutter_trips/widget/local_nav.dart';
 import 'package:flutter_trips/widget/sales_box.dart';
 import 'package:flutter_trips/widget/sub_nav.dart';
+import 'package:flutter_trips/widget/webview.dart';
 const APPBAR_SCROLL_OFFSET = 100;
 
 class HomePage extends StatefulWidget {
@@ -20,18 +21,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
-    _loadData();
+    _handleRefresh();
   }
-  List _imageUrls = [
-    'http://pic32.nipic.com/20130823/7459925_151603450000_2.jpg',
-    'http://pic163.nipic.com/file/20180421/7092831_140036752037_2.jpg',
-    'http://hbimg.b0.upaiyun.com/4147548aacbd056c9311ddc62daf09e24c73e12ffc7d-py9TME_fw658'
-  ];
 //动态更改的透明度
   double appBarAlpha = 0;
 //球区入口数据
   List<CommonModel> localNavList = [];
   List<CommonModel> subNavList = [];
+  List<CommonModel> bannerList = [];
   GridNavModel gridNavModel ;
   SalesBoxModel salesBoxModel ;
   bool _isLoading = true;
@@ -47,64 +44,21 @@ class _HomePageState extends State<HomePage> {
             MediaQuery.removePadding(
                 removeTop: true,
                 context: context,
-                child:  NotificationListener(
-                  onNotification: (scrollNotification) {
-                    //滚动时在进行回调 并且只监听当前NotificationListener里面的第一个元素才会触发更改appBar透明度
-                    if(scrollNotification is ScrollUpdateNotification && scrollNotification.depth == 0) {
-                      _onScroll(scrollNotification.metrics.pixels);
-                    }
-                    return false;
-                  },
-                  child: ListView(
-                    children: <Widget>[
-                      Container(
-                        height: 150,
-                        child: Swiper(
-                          itemCount: _imageUrls.length,
-                          autoplay: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Image.network(_imageUrls[index],fit: BoxFit.fill,);
-                          },
-                          pagination: SwiperPagination(),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(7, 4, 7, 4),
-                        child:  LocalNav(localNavList: localNavList,),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
-                        child:   GridNav( gridNavModel:gridNavModel ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
-                        child:   SubNav( subNavList : subNavList ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
-                        child:   SalesBox( salesBox: salesBoxModel ),
-                      ),
-//                    Container(
-//                      height: 800,
-//                      child: ListTile(title: Text('哈哈'),),
-//                    )
-                    ],
-                  ),
+                child:  RefreshIndicator(
+                    onRefresh: _handleRefresh,
+                    child: NotificationListener(
+                      onNotification: (scrollNotification) {
+                        //滚动时在进行回调 并且只监听当前NotificationListener里面的第一个元素才会触发更改appBar透明度
+                        if(scrollNotification is ScrollUpdateNotification && scrollNotification.depth == 0) {
+                          _onScroll(scrollNotification.metrics.pixels);
+                        }
+                        return false;
+                      },
+                      child:  _listView
+                    )
                 )
             ),
-            Opacity(
-              opacity: appBarAlpha,
-              child: Container(
-                height: 80,
-                decoration: BoxDecoration(color: Colors.white),
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 20),
-                    child: Text('首页'),
-                  ),
-                ),
-              ),
-            )
+            _appBar
           ],
         ),
       )
@@ -123,7 +77,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  _loadData() async{
+  Future<Null> _handleRefresh() async{
     try {
       HomeModel model = await HomeDao.fetch();
       setState(() {
@@ -131,6 +85,7 @@ class _HomePageState extends State<HomePage> {
         gridNavModel = model.gridNav;
         subNavList = model.subNavList;
         salesBoxModel = model.salesBox;
+        bannerList = model.bannerList;
         _isLoading = false;
       });
     }catch(e) {
@@ -139,6 +94,72 @@ class _HomePageState extends State<HomePage> {
         _isLoading = false;
       });
     }
+    return null;
+  }
+
+  Widget get _listView {
+    return ListView(
+      children: <Widget>[
+        _banner,
+        Padding(
+          padding: EdgeInsets.fromLTRB(7, 4, 7, 4),
+          child:  LocalNav(localNavList: localNavList,),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
+          child:   GridNav( gridNavModel:gridNavModel ),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
+          child:   SubNav( subNavList : subNavList ),
+        ),
+        Padding(
+          padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
+          child:   SalesBox( salesBox: salesBoxModel ),
+        ),
+      ],
+    );
+  }
+
+  Widget get _banner {
+    return    Container(
+      height: 150,
+      child: Swiper(
+        itemCount: bannerList.length,
+        autoplay: true,
+        itemBuilder: (BuildContext context, int index) {
+          return GestureDetector(
+            onTap: () {
+              CommonModel model = bannerList[index];
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>WebView(
+                url:  model.url,
+                title: model.title,
+                hideAppBar:model.hideAppBar,
+              )));
+            },
+            child: Image.network(bannerList[index].icon,fit: BoxFit.fill,),
+          );
+        },
+        pagination: SwiperPagination(),
+      ),
+    );
+  }
+
+  Widget get _appBar {
+    return    Opacity(
+      opacity: appBarAlpha,
+      child: Container(
+        height: 80,
+        decoration: BoxDecoration(color: Colors.white),
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.only(top: 20),
+            child: Text('谢福泰毕业设计'),
+          ),
+        ),
+      ),
+    );
   }
 }
+
 
