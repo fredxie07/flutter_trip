@@ -58,7 +58,7 @@ class _SearchBarState extends State<SearchBar> {
           _wrapTap(
             Container(
               padding: EdgeInsets.fromLTRB(6, 5, 10, 5),
-              child: widget.hideLeft ?? false ? null : Icon(Icons.arrow_back_ios,color: Colors.grey,size: 26,),
+              child: widget.hideLeft ?? false ? null : Icon(Icons.arrow_back_ios,color: Colors.grey,size: 20,),
             ),
               widget.leftButtonClick
           ),
