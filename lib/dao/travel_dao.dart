@@ -22,7 +22,7 @@ Map<String, dynamic> Params=  {
   "contentType": "json"
 };
 //旅拍页接口
-class TravelTabDao {
+class TravelDao {
   /*
   * url post请求的接口
   * groupChannelCode 请求旅拍模块哪个类别下的数据

@@ -25,7 +25,6 @@ class TravelModel {
   }
 }
 
-
 class TravelItem {
   int type;
   Article article;
@@ -35,7 +34,7 @@ class TravelItem {
   TravelItem.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     article =
-    json['article'] != null ? new Article.fromJson(json['article']) : null;
+        json['article'] != null ? new Article.fromJson(json['article']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -79,32 +78,32 @@ class Article {
 
   Article(
       {this.articleId,
-        this.articleType,
-        this.productType,
-        this.sourceType,
-        this.articleTitle,
-        this.author,
-        this.images,
-        this.hasVideo,
-        this.readCount,
-        this.likeCount,
-        this.commentCount,
-        this.urls,
-        this.tags,
-        this.topics,
-        this.pois,
-        this.publishTime,
-        this.publishTimeDisplay,
-        this.shootTime,
-        this.shootTimeDisplay,
-        this.level,
-        this.distanceText,
-        this.isLike,
-        this.imageCounts,
-        this.isCollected,
-        this.collectCount,
-        this.articleStatus,
-        this.poiName});
+      this.articleType,
+      this.productType,
+      this.sourceType,
+      this.articleTitle,
+      this.author,
+      this.images,
+      this.hasVideo,
+      this.readCount,
+      this.likeCount,
+      this.commentCount,
+      this.urls,
+      this.tags,
+      this.topics,
+      this.pois,
+      this.publishTime,
+      this.publishTimeDisplay,
+      this.shootTime,
+      this.shootTimeDisplay,
+      this.level,
+      this.distanceText,
+      this.isLike,
+      this.imageCounts,
+      this.isCollected,
+      this.collectCount,
+      this.articleStatus,
+      this.poiName});
 
   Article.fromJson(Map<String, dynamic> json) {
     articleId = json['articleId'];
@@ -113,7 +112,7 @@ class Article {
     sourceType = json['sourceType'];
     articleTitle = json['articleTitle'];
     author =
-    json['author'] != null ? new Author.fromJson(json['author']) : null;
+        json['author'] != null ? new Author.fromJson(json['author']) : null;
     if (json['images'] != null) {
       images = new List<Images>();
       json['images'].forEach((v) {
@@ -209,12 +208,12 @@ class Author {
 
   Author(
       {this.authorId,
-        this.nickName,
-        this.clientAuth,
-        this.jumpUrl,
-        this.coverImage,
-        this.identityType,
-        this.tag});
+      this.nickName,
+      this.clientAuth,
+      this.jumpUrl,
+      this.coverImage,
+      this.identityType,
+      this.tag});
 
   Author.fromJson(Map<String, dynamic> json) {
     authorId = json['authorId'];
@@ -266,19 +265,19 @@ class Images {
   int imageId;
   String dynamicUrl;
   String originalUrl;
-  int width;
-  int height;
+  double width;
+  double height;
   int mediaType;
   bool isWaterMarked;
 
   Images(
       {this.imageId,
-        this.dynamicUrl,
-        this.originalUrl,
-        this.width,
-        this.height,
-        this.mediaType,
-        this.isWaterMarked});
+      this.dynamicUrl,
+      this.originalUrl,
+      this.width,
+      this.height,
+      this.mediaType,
+      this.isWaterMarked});
 
   Images.fromJson(Map<String, dynamic> json) {
     imageId = json['imageId'];
@@ -364,15 +363,15 @@ class Pois {
 
   Pois(
       {this.poiType,
-        this.poiId,
-        this.poiName,
-        this.businessId,
-        this.districtId,
-        this.poiExt,
-        this.source,
-        this.isMain,
-        this.isInChina,
-        this.countryName});
+      this.poiId,
+      this.poiName,
+      this.businessId,
+      this.districtId,
+      this.poiExt,
+      this.source,
+      this.isMain,
+      this.isInChina,
+      this.countryName});
 
   Pois.fromJson(Map<String, dynamic> json) {
     poiType = json['poiType'];
@@ -381,7 +380,7 @@ class Pois {
     businessId = json['businessId'];
     districtId = json['districtId'];
     poiExt =
-    json['poiExt'] != null ? new PoiExt.fromJson(json['poiExt']) : null;
+        json['poiExt'] != null ? new PoiExt.fromJson(json['poiExt']) : null;
     source = json['source'];
     isMain = json['isMain'];
     isInChina = json['isInChina'];

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_trips/dao/search_dao.dart';
 import 'package:flutter_trips/model/search_model.dart';
